@@ -60,7 +60,14 @@ export default function MobileDock() {
           </Link>
           <button onClick={() => setOpen(true)} className="eyebrow flex flex-[1.6] items-center justify-center gap-2 rounded-full bg-ink py-3 text-[10px] text-ivory">
             <BagIcon size={15} />
-            {count > 0 ? `${count} · ${price(subtotal)}` : "Bag"}
+            {count > 0 ? (
+              <span className="whitespace-nowrap">
+                {count}
+                <span className="max-[359px]:hidden"> · {price(subtotal)}</span>
+              </span>
+            ) : (
+              "Bag"
+            )}
           </button>
         </nav>
       )}

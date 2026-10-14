@@ -8,25 +8,22 @@ import { AnimatePresence, motion } from "motion/react";
 import { useCart } from "./CartProvider";
 import { BagIcon, CloseIcon } from "./ui/Icons";
 import { lockScroll } from "@/lib/motion";
+import { onAppReady } from "@/lib/ready";
 import NavLinks, { ActiveNav } from "./nav/NavLinks";
 import { NAV } from "./nav/useActiveNav";
 
 export default function Header() {
   const { count, setOpen } = useCart();
   const pathname = usePathname();
-  const [hidden, setHidden] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const [solid, setSolid] = useState(false);
   const [menu, setMenu] = useState(false);
 
+  // Slides in once, when the brand loader lifts, then stays put for the whole visit.
+  useEffect(() => onAppReady(() => setRevealed(true)), []);
+
   useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      setSolid(y > 40);
-      setHidden(y > 200 && y > last + 2);
-      if (y < last - 2) setHidden(false);
-      last = y;
-    };
+    const onScroll = () => setSolid(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -42,9 +39,9 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,backdrop-filter] duration-700 ease-[var(--ease-silk)] ${
-          hidden && !menu ? "-translate-y-full" : ""
-        } ${solid && !menu ? "bg-cream/95 md:bg-cream/75 md:backdrop-blur-md" : ""} ${menu ? "[&_.eyebrow]:!text-cream [&_svg]:text-cream" : ""}`}
+        className={`fixed inset-x-0 top-0 z-50 transition-[transform,opacity,background-color,backdrop-filter] duration-1000 ease-[var(--ease-silk)] ${
+          revealed ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+        } ${solid && !menu ? "bg-cream md:bg-cream/75 md:backdrop-blur-md" : ""} ${menu ? "[&_.eyebrow]:!text-cream [&_svg]:text-cream" : ""}`}
       >
         <div className="container-x flex h-[var(--header-h)] items-center justify-between">
           <nav className="hidden flex-1 items-center gap-8 lg:flex" aria-label="Primary">
@@ -53,7 +50,7 @@ export default function Header() {
 
           <button
             onClick={() => setMenu((m) => !m)}
-            className="eyebrow flex flex-1 items-center gap-3 text-ink lg:hidden"
+            className="eyebrow -my-3 flex flex-1 items-center gap-3 py-3 text-ink lg:hidden"
             aria-expanded={menu}
             aria-controls="menu"
           >
@@ -74,7 +71,7 @@ export default function Header() {
             </nav>
             <button
               onClick={() => setOpen(true)}
-              className="eyebrow group flex items-center gap-2 text-[11px] font-medium text-ink"
+              className="eyebrow group -m-3 flex items-center gap-2 p-3 text-[11px] font-medium text-ink"
               aria-label={`Open bag, ${count} items`}
             >
               <span className="hidden sm:inline">Bag</span>

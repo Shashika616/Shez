@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { categories, products } from "@/lib/products";
 import { store } from "@/lib/config";
 import ProductCard from "./ProductCard";
 import Select from "./ui/Select";
 import { Reveal, SplitWords } from "./ui/Reveal";
-import { ScrollTrigger } from "@/lib/motion";
+import { ScrollTrigger, getLenis } from "@/lib/motion";
 
 const SORTS = {
   featured: "Featured",
@@ -21,6 +21,27 @@ const SORT_OPTIONS = (Object.keys(SORTS) as Sort[]).map((value) => ({ value, lab
 export default function ShopView({ initial }: { initial: string }) {
   const [cat, setCat] = useState(categories.some((c) => c.id === initial) ? initial : "all");
   const [sort, setSort] = useState<Sort>("featured");
+  const bar = useRef<HTMLDivElement>(null);
+  const results = useRef<HTMLDivElement>(null);
+  const firstRender = useRef(true);
+
+  // A new filter or sort can shorten the list under you. If you're already past the top of the results,
+  // glide back to it so the new results are what you see (not the footer).
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    const anchor = results.current;
+    if (!anchor) return;
+    const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64;
+    const offset = header + (bar.current?.offsetHeight ?? 0) + 8;
+    const top = anchor.getBoundingClientRect().top + window.scrollY - offset;
+    if (window.scrollY <= top + 1) return;
+    const lenis = getLenis();
+    if (lenis) lenis.scrollTo(top, { duration: 0.9 });
+    else window.scrollTo({ top, behavior: "smooth" });
+  }, [cat, sort]);
 
   // Header links change ?c= while this page stays mounted; follow them.
   useEffect(() => {
@@ -72,7 +93,7 @@ export default function ShopView({ initial }: { initial: string }) {
           </p>
         </Reveal>
 
-        <div className="sticky top-0 z-30 -mx-[var(--gutter)] mt-10 bg-cream/95 px-[var(--gutter)] py-3 md:bg-cream/85 md:backdrop-blur-md">
+        <div ref={bar} className="sticky top-[var(--header-h)] z-30 -mx-[var(--gutter)] mt-10 bg-cream px-[var(--gutter)] py-3 md:bg-cream/85 md:backdrop-blur-md">
           <div className="flex items-center justify-between gap-4">
             <LayoutGroup>
               <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 py-1" role="tablist" aria-label="Categories">
@@ -108,7 +129,7 @@ export default function ShopView({ initial }: { initial: string }) {
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-between md:mt-8">
+        <div ref={results} className="mt-6 flex items-center justify-between md:mt-8">
           <p className="text-sm text-ink/60">
             <span className="display text-2xl italic text-ink">{label}</span> <span className="whitespace-nowrap">· {list.length} pieces</span>
           </p>

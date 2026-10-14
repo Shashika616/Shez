@@ -322,13 +322,24 @@ export default function Checkout() {
             <button
               type="submit"
               disabled={placing || lines.length === 0}
-              className="group mt-10 flex w-full items-center justify-between rounded-full bg-ink px-8 py-5 text-ivory transition-colors hover:bg-brown disabled:opacity-60"
+              className="group mt-10 flex w-full items-center justify-between rounded-full bg-ink px-6 py-5 md:px-8 text-ivory transition-colors hover:bg-brown disabled:opacity-60"
             >
-              <span className="eyebrow">{placing ? "Placing your order…" : `Place order · ${price(total)}`}</span>
+              <span className="eyebrow whitespace-nowrap">
+                {placing ? (
+                  "Placing your order…"
+                ) : (
+                  <>
+                    Place order<span className="hidden md:inline"> · {price(total)}</span>
+                  </>
+                )}
+              </span>
               {placing ? (
                 <span className="h-4 w-4 animate-spin rounded-full border border-ivory border-t-transparent" />
               ) : (
-                <ArrowIcon className="transition-transform group-hover:translate-x-1" />
+                <span className="flex items-center gap-3">
+                  <span className="whitespace-nowrap text-sm tracking-wide md:hidden">{price(total)}</span>
+                  <ArrowIcon className="transition-transform group-hover:translate-x-1" />
+                </span>
               )}
             </button>
             <p className="mt-4 text-center text-xs text-ink/55">We&apos;ll confirm your order personally on WhatsApp before dispatch.</p>

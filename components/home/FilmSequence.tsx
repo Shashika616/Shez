@@ -205,6 +205,9 @@ function FilmScrub() {
   );
 }
 
+// The source clip is slow-motion; a touch quicker reads better on a small screen.
+const PHONE_PLAYBACK_RATE = 1.4;
+
 /** Phones: the same film as a muted loop that only plays while on screen, with chapters following the playhead. */
 function FilmLoop() {
   const root = useRef<HTMLElement>(null);
@@ -213,6 +216,19 @@ function FilmLoop() {
   const [src, setSrc] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   const [chapter, setChapter] = useState(0);
+  const onScreenNow = useRef(false);
+
+  const play = () => {
+    const v = video.current;
+    if (!v || !v.getAttribute("src")) return;
+    v.playbackRate = PHONE_PLAYBACK_RATE;
+    v.play().catch(() => {});
+  };
+
+  // The source can arrive after the section is already on screen (fast scroll or jump): start then.
+  useEffect(() => {
+    if (src && onScreenNow.current) play();
+  }, [src]);
 
   useEffect(() => {
     if (isDesktop()) return;
@@ -228,8 +244,11 @@ function FilmLoop() {
       },
       { rootMargin: "100% 0px" },
     );
+    // Loading a source resets playbackRate to the default, so set both.
+    v.defaultPlaybackRate = PHONE_PLAYBACK_RATE;
     const onScreen = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) v.play().catch(() => {});
+      onScreenNow.current = e.isIntersecting;
+      if (e.isIntersecting) play();
       else v.pause();
     }, { threshold: 0.25 });
     near.observe(el);
@@ -261,7 +280,11 @@ function FilmLoop() {
         loop
         playsInline
         preload="none"
-        onLoadedData={() => setReady(true)}
+        onLoadedData={(e) => {
+          setReady(true);
+          e.currentTarget.playbackRate = PHONE_PLAYBACK_RATE;
+        }}
+        onPlay={(e) => (e.currentTarget.playbackRate = PHONE_PLAYBACK_RATE)}
         onTimeUpdate={onTime}
         className="absolute inset-0 h-full w-full object-cover"
         aria-label="A woman in an embroidered white dress turns slowly in a candle-lit room"

@@ -76,7 +76,7 @@ export default function Footer() {
       </div>
 
       <div className="container-x mt-20 flex flex-wrap gap-2">
-        {["Cash on delivery", "Bank transfer", `Dispatch in ${store.dispatchDays}`, "7-day exchanges"].map((t) => (
+        {["Cash on delivery", "Bank transfer", `Dispatch in ${store.dispatchShort}`, "7-day exchanges"].map((t) => (
           <span key={t} className="eyebrow flex items-center gap-2 rounded-full border border-cream/15 px-4 py-2.5 text-[9px] text-cream/70">
             <SparkIcon size={8} className="text-gold" /> {t}
           </span>

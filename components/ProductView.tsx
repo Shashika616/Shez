@@ -212,7 +212,13 @@ export default function ProductView({ product, related }: { product: Product; re
                     transition={{ duration: 0.3 }}
                     className="block"
                   >
-                    {added ? "Added to your bag ✓" : `Add to bag · ${price(product.price * qty)}`}
+                    {added ? (
+                      "Added to your bag ✓"
+                    ) : (
+                      <span className="whitespace-nowrap">
+                        Add to bag<span className="max-[400px]:hidden"> · {price(product.price * qty)}</span>
+                      </span>
+                    )}
                   </motion.span>
                 </AnimatePresence>
               </button>
