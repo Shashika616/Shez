@@ -7,6 +7,7 @@ import { gsap } from "@/lib/motion";
 import { featured } from "@/lib/products";
 import ProductCard from "../ProductCard";
 import { Reveal, SplitWords } from "../ui/Reveal";
+import SectionLabel from "../ui/SectionLabel";
 import { ArrowIcon } from "../ui/Icons";
 
 export default function FeaturedEdit() {
@@ -44,7 +45,7 @@ export default function FeaturedEdit() {
       <div className="lg:sticky lg:top-0 lg:flex lg:h-svh lg:flex-col lg:justify-center lg:overflow-hidden">
         <div className="container-x flex items-end justify-between gap-6 pt-20 lg:pt-[calc(var(--header-h)+1rem)]">
           <Reveal>
-            <p className="eyebrow text-brown">{"{02}"} — The Edit</p>
+            <SectionLabel kicker="The edit" sub="The pieces we reach for, season after season" />
             <h2 id="edit-title" className="display mt-4 text-[13vw] lg:text-[6vw]">
               <SplitWords text="Pieces she lives in." italic={["lives"]} />
             </h2>
@@ -58,11 +59,10 @@ export default function FeaturedEdit() {
           ref={track}
           className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gutter)] pb-6 max-lg:scroll-px-[var(--gutter)] lg:mt-10 lg:gap-6 lg:overflow-visible lg:pb-0"
         >
-          {featured.map((p, i) => (
+          {featured.map((p) => (
             <ProductCard
               key={p.slug}
               product={p}
-              index={i}
               sizes="(min-width:1024px) 22vw, 68vw"
               className="w-[68vw] shrink-0 snap-start sm:w-[42vw] lg:w-[22vw]"
             />

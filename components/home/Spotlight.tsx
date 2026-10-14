@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import SmartImage from "../ui/SmartImage";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import { getProduct } from "@/lib/products";
 import { price } from "@/lib/format";
 import { useCart } from "../CartProvider";
 import { Reveal, SplitWords } from "../ui/Reveal";
+import SectionLabel from "../ui/SectionLabel";
 import { ArrowIcon, Stars } from "../ui/Icons";
 
 /** The season's hero piece, buyable without leaving the home page. */
@@ -41,16 +42,16 @@ export default function Spotlight() {
       <div className="container-x grid items-center gap-12 md:grid-cols-12">
         <div className="relative md:col-span-6">
           <div className="sp-a relative mx-auto aspect-[4/5] w-[86%] overflow-hidden rounded-t-full md:w-[78%]">
-            <Image src={product.images[0]} alt={`${product.name} worn in a garden`} fill sizes="(min-width:768px) 40vw, 86vw" className="object-cover" />
+            <SmartImage src={product.images[0]} alt={`${product.name}, worn`} sizes="(min-width:768px) 40vw, 86vw" className="object-cover" />
           </div>
           <div className="sp-b absolute -bottom-6 right-0 aspect-[3/4] w-[38%] overflow-hidden rounded-[2px] border-[6px] border-ivory shadow-xl md:right-2 md:w-[34%]">
-            <Image src={product.images[1]} alt="" fill sizes="(min-width:768px) 16vw, 38vw" className="object-cover" />
+            <SmartImage src={product.images[1]} alt="" sizes="(min-width:768px) 16vw, 38vw" className="object-cover" />
           </div>
           <p className="eyebrow absolute left-0 top-6 origin-left -rotate-90 translate-y-24 text-[9px] text-ink/50 max-md:hidden">Piece of the season</p>
         </div>
 
         <Reveal className="md:col-span-5 md:col-start-8">
-          <p className="eyebrow text-brown">{"{05}"} — Piece of the season</p>
+          <SectionLabel kicker="Piece of the season" sub="The dress our customers wore all summer long" />
           <h2 className="display mt-4 text-[14vw] md:text-[5.6vw]">
             <SplitWords text={product.name} italic={["Tiered"]} />
           </h2>
@@ -67,7 +68,7 @@ export default function Spotlight() {
               {product.compareAt && <p className="text-sm text-ink/45 line-through">{price(product.compareAt)}</p>}
             </div>
             <p className={`eyebrow mt-6 text-[10px] transition-colors ${nudge ? "text-[#a23b2a]" : "text-ink/60"}`}>
-              {size ? `Size — ${size}` : "Select your size"}
+              {size ? `Size: ${size}` : "Select your size"}
             </p>
             <div className={`mt-3 flex flex-wrap gap-2 ${nudge ? "animate-[shake_.5s]" : ""}`} role="radiogroup" aria-label="Size">
               {product.sizes.map((s) => (

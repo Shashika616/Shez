@@ -31,8 +31,8 @@ export const ArrowIcon = ({ className, size = 18 }: P) => (
   </svg>
 );
 
-export const SparkIcon = ({ className, size = 14 }: P) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+export const SparkIcon = ({ className, size = 14, style }: P & { style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} style={style} aria-hidden>
     <path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0Z" />
   </svg>
 );

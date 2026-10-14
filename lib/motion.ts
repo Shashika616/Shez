@@ -10,15 +10,22 @@ if (typeof window !== "undefined") {
 
 // One Lenis instance shared by the whole app (set by <SmoothScroll>).
 let lenis: Lenis | null = null;
-export const setLenis = (l: Lenis | null) => (lenis = l);
+let locked = false;
+
+export const setLenis = (l: Lenis | null) => {
+  lenis = l;
+  // A lock requested before Lenis existed (e.g. by the brand loader) still applies.
+  if (l && locked) l.stop();
+};
 export const getLenis = () => lenis;
 
-export function lockScroll(locked: boolean) {
+export function lockScroll(lock: boolean) {
+  locked = lock;
   if (lenis) {
-    if (locked) lenis.stop();
+    if (lock) lenis.stop();
     else lenis.start();
   }
-  document.documentElement.style.overflow = locked ? "hidden" : "";
+  document.documentElement.style.overflow = lock ? "hidden" : "";
 }
 
 export const prefersReducedMotion = () =>

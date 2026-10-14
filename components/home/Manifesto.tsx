@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import SmartImage from "../ui/SmartImage";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/motion";
 import { Reveal, SplitWords } from "../ui/Reveal";
+import SectionLabel from "../ui/SectionLabel";
 
 // [img:key] tokens become small inline photographs inside the sentence.
 const TEXT =
@@ -80,9 +81,9 @@ export default function Manifesto() {
   return (
     <section ref={root} id="story" className="relative scroll-mt-10 bg-cream py-24 md:py-40">
       <div className="container-x">
-        <Reveal className="flex items-center justify-between">
-          <p className="eyebrow text-brown">{"{01}"} — Our story</p>
-          <p className="eyebrow hidden text-ink/50 md:block">Est. Colombo</p>
+        <Reveal className="flex items-end justify-between">
+          <SectionLabel kicker="Our story" sub="A house built on quiet confidence" />
+          <p className="eyebrow hidden self-end text-ink/50 md:block">Est. Colombo</p>
         </Reveal>
         <Reveal className="mt-4">
           <div className="rule text-ink" />
@@ -99,7 +100,7 @@ export default function Manifesto() {
                   data-w="1.9em"
                   style={{ width: "1.9em" }}
                 >
-                  <Image src={`/images/${m[1]}.jpg`} alt="" fill sizes="160px" className="object-cover" />
+                  <SmartImage src={`/images/${m[1]}.jpg`} alt="" sizes="160px" className="object-cover" />
                 </span>
               );
             return (
@@ -120,7 +121,7 @@ export default function Manifesto() {
         <div className="mt-20 grid gap-12 md:mt-32 md:grid-cols-12">
           <Reveal className="md:col-span-5">
             <div className="curtain relative aspect-[4/5] overflow-hidden">
-              <Image src="/images/e1.jpg" alt="A woman in a soft beige suit, her hair caught mid-movement" fill sizes="(min-width:768px) 40vw, 100vw" className="object-cover" />
+              <SmartImage src="/images/e1.jpg" alt="A woman in a soft beige suit, her hair caught mid-movement" sizes="(min-width:768px) 40vw, 100vw" className="object-cover" />
             </div>
           </Reveal>
           <div className="flex flex-col justify-end md:col-span-6 md:col-start-7">

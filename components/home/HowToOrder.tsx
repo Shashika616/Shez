@@ -1,11 +1,12 @@
 "use client";
 
-import Image from "next/image";
+import SmartImage from "../ui/SmartImage";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { store } from "@/lib/config";
 import { Reveal, SplitWords } from "../ui/Reveal";
-import { PlusIcon } from "../ui/Icons";
+import { PlusIcon, SparkIcon } from "../ui/Icons";
+import SectionLabel from "../ui/SectionLabel";
 
 const STEPS = [
   {
@@ -42,7 +43,7 @@ export default function HowToOrder() {
       <div className="container-x grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
           <Reveal className="md:sticky md:top-28">
-            <p className="eyebrow text-brown">{"{06}"} — How to order</p>
+            <SectionLabel kicker="How to order" sub="No cards, no gateways, just a conversation" />
             <h2 className="display mt-4 text-[13vw] md:text-[5vw]">
               <SplitWords text="Simple, personal, no card needed." italic={["personal,"]} />
             </h2>
@@ -56,7 +57,7 @@ export default function HowToOrder() {
                   exit={{ opacity: 0.999 }}
                   transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 >
-                  <Image src={STEPS[active].img} alt="" fill sizes="30vw" className="object-cover" />
+                  <SmartImage src={STEPS[active].img} alt="" sizes="30vw" className="object-cover" />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -74,7 +75,7 @@ export default function HowToOrder() {
                     aria-expanded={open}
                     className="flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
                   >
-                    <span className={`eyebrow w-10 shrink-0 text-[10px] transition-colors ${open ? "text-brown" : "text-ink/40"}`}>{`{0${i + 1}}`}</span>
+                    <SparkIcon size={12} className={`shrink-0 transition-all duration-500 ${open ? "rotate-45 text-gold" : "text-ink/25"}`} />
                     <span className={`display flex-1 text-4xl transition-all duration-500 md:text-5xl ${open ? "italic" : "text-ink/60"}`}>{s.title}</span>
                     <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-ink/20 transition-transform duration-500 ${open ? "rotate-45 bg-ink text-ivory" : ""}`}>
                       <PlusIcon size={14} />
@@ -89,7 +90,7 @@ export default function HowToOrder() {
                         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="pb-8 pl-[60px] md:pl-[72px]">
+                        <div className="pb-8 pl-[32px] md:pl-[44px]">
                           <p className="max-w-md text-[15px] leading-7 text-ink/75">{s.body}</p>
                           <div className="mt-5 flex flex-wrap gap-2">
                             {s.tags.map((t) => (

@@ -6,7 +6,8 @@ export const store = {
   locale: "en-LK",
   deliveryFee: 450,
   freeDeliveryOver: 25000,
-  dispatchDays: "2–4 working days island-wide",
+  dispatchDays: "2 to 4 working days island-wide",
+  dispatchShort: "2 to 4 days",
   contact: {
     whatsapp: "+94 77 000 0000",
     email: "hello@shez.store",

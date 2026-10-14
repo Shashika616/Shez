@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import SmartImage from "./ui/SmartImage";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
@@ -9,9 +10,9 @@ import { price } from "@/lib/format";
 import { useCart } from "./CartProvider";
 import { PlusIcon, Stars } from "./ui/Icons";
 
-type Props = { product: Product; index?: number; sizes?: string; className?: string; priority?: boolean };
+type Props = { product: Product; sizes?: string; className?: string; priority?: boolean };
 
-export default function ProductCard({ product, index, sizes = "(min-width: 1024px) 25vw, 50vw", className, priority }: Props) {
+export default function ProductCard({ product, sizes = "(min-width: 1024px) 25vw, 50vw", className, priority }: Props) {
   const { add } = useCart();
   const [picking, setPicking] = useState(false);
   const single = product.sizes.length === 1;
@@ -25,10 +26,9 @@ export default function ProductCard({ product, index, sizes = "(min-width: 1024p
     <article className={`group relative ${className ?? ""}`}>
       <div className="relative aspect-[3/4] overflow-hidden rounded-[2px] bg-sand">
         <Link href={`/product/${product.slug}`} data-cursor="View" aria-label={product.name} className="absolute inset-0">
-          <Image
+          <SmartImage
             src={product.images[0]}
             alt={`${product.name} in ${product.colour}`}
-            fill
             sizes={sizes}
             priority={priority}
             className="object-cover transition-[transform,opacity] duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
@@ -47,11 +47,6 @@ export default function ProductCard({ product, index, sizes = "(min-width: 1024p
         {product.badge && (
           <span className="eyebrow pointer-events-none absolute left-3 top-3 rounded-full bg-ivory/85 px-2.5 py-1.5 text-[9px] text-ink backdrop-blur">
             {product.badge}
-          </span>
-        )}
-        {typeof index === "number" && (
-          <span className="eyebrow pointer-events-none absolute right-3 top-3 text-[9px] text-ivory mix-blend-difference">
-            {String(index + 1).padStart(2, "0")}
           </span>
         )}
 

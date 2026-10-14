@@ -4,6 +4,7 @@ import Image from "next/image";
 import { reviews, ratingSummary, type Review } from "@/lib/reviews";
 import { Reveal, SplitWords } from "../ui/Reveal";
 import { Stars } from "../ui/Icons";
+import SectionLabel from "../ui/SectionLabel";
 
 function Card({ r }: { r: Review }) {
   return (
@@ -43,7 +44,7 @@ export default function Reviews() {
     <section id="reviews" className="scroll-mt-10 overflow-hidden bg-cream py-24 md:py-36">
       <div className="container-x grid gap-10 md:grid-cols-12 md:items-end">
         <Reveal className="md:col-span-7">
-          <p className="eyebrow text-brown">{"{07}"} — In their words</p>
+          <SectionLabel kicker="In their words" sub="Notes from the women who wear Shez" />
           <h2 className="display mt-4 text-[13vw] md:text-[6vw]">
             <SplitWords text="Loved, worn, written about." italic={["worn,"]} />
           </h2>

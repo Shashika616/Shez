@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import SmartImage from "./ui/SmartImage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -122,7 +123,7 @@ export default function ProductView({ product, related }: { product: Product; re
                 transition={{ duration: 1.2, delay: 0.1 + i * 0.12, ease: [0.65, 0, 0.35, 1] }}
                 className={`relative aspect-[3/4] w-full shrink-0 snap-center overflow-hidden bg-sand ${i === 0 ? "md:col-span-2 md:aspect-[4/5]" : ""}`}
               >
-                <Image src={src} alt={i === 0 ? `${product.name} in ${product.colour}` : `${product.name}, alternate view`} fill priority={i === 0} sizes="(min-width:768px) 58vw, 100vw" className="object-cover" />
+                <SmartImage src={src} alt={i === 0 ? `${product.name} in ${product.colour}` : `${product.name}, alternate view`} priority={i === 0} sizes="(min-width:768px) 58vw, 100vw" className="object-cover" />
               </motion.div>
             ))}
           </div>
@@ -161,14 +162,14 @@ export default function ProductView({ product, related }: { product: Product; re
             <div className="mt-7 flex items-center gap-3 text-sm">
               <span className="h-6 w-6 rounded-full border border-ink/20 ring-2 ring-ivory ring-offset-1 ring-offset-ink/20" style={{ background: product.swatch }} />
               <span>
-                Colour — <span className="italic">{product.colour}</span>
+                Colour: <span className="italic">{product.colour}</span>
               </span>
             </div>
 
             {!single && (
               <div ref={sizeRef} className="mt-7 scroll-mt-32">
                 <div className="flex items-center justify-between">
-                  <p className={`eyebrow text-[10px] transition-colors ${nudge ? "text-[#a23b2a]" : "text-ink/60"}`}>{size ? `Size — ${size}` : "Select your size"}</p>
+                  <p className={`eyebrow text-[10px] transition-colors ${nudge ? "text-[#a23b2a]" : "text-ink/60"}`}>{size ? `Size: ${size}` : "Select your size"}</p>
                   {product.category !== "shoes" && product.category !== "jewellery" && (
                     <button onClick={() => setGuide(true)} className="text-xs text-ink/60 underline underline-offset-4">
                       Size guide
@@ -217,11 +218,11 @@ export default function ProductView({ product, related }: { product: Product; re
               </button>
             </div>
             <button onClick={orderNow} className="eyebrow mt-3 w-full rounded-full border border-ink py-[18px] transition-colors hover:bg-ink hover:text-ivory">
-              Order now — pay on delivery
+              Order now, pay on delivery
             </button>
 
             <ul className="mt-6 grid grid-cols-2 gap-2 text-[12px] text-ink/70">
-              {["Cash on delivery", "Bank transfer", `Ships in ${store.dispatchDays.split(" ")[0]} days`, "7-day exchange"].map((t) => (
+              {["Cash on delivery", "Bank transfer", `Ships in ${store.dispatchShort}`, "7-day exchange"].map((t) => (
                 <li key={t} className="flex items-center gap-2 rounded-xl bg-ivory px-3 py-3">
                   <SparkIcon size={9} className="shrink-0 text-gold" /> {t}
                 </li>

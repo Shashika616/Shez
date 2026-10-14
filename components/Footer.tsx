@@ -85,7 +85,7 @@ export default function Footer() {
 
       <Reveal className="container-x relative mt-14">
         <div className="curtain relative mx-auto aspect-[2154/1457] w-full max-w-[1100px] opacity-90">
-          <Image src="/shez-logo-light.png" alt="Shez — Wear your story" fill sizes="100vw" className="object-contain" />
+          <Image src="/shez-logo-light.png" alt="Shez, wear your story" fill sizes="100vw" className="object-contain" />
         </div>
       </Reveal>
 

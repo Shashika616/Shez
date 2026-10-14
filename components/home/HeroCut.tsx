@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, lockScroll, prefersReducedMotion } from "@/lib/motion";
-import { ArrowIcon, Scissors } from "../ui/Icons";
+import { onAppReady } from "@/lib/ready";
+import { ArrowIcon, Scissors, SparkIcon } from "../ui/Icons";
 
 const CARDS = [
   { src: "/images/d3.jpg", label: "The Azure Tier", focus: "50% 40%" },
@@ -26,22 +27,38 @@ const RIGHT_CLIP = `polygon(100% 0%, ${edge}, 100% 100%)`;
 
 const HEADLINE = "Wear your story.";
 
+// Where the gold sparkles twinkle around the logo (percent of the logo box), with staggered timing.
+const SPARKLES = [
+  { x: 8, y: 30, s: 18, d: 0 },
+  { x: 22, y: 82, s: 12, d: 1.6 },
+  { x: 41, y: 12, s: 14, d: 3.1 },
+  { x: 58, y: 88, s: 20, d: 0.8 },
+  { x: 74, y: 6, s: 12, d: 2.4 },
+  { x: 92, y: 44, s: 16, d: 4.0 },
+  { x: 86, y: 92, s: 12, d: 1.2 },
+  { x: 3, y: 64, s: 12, d: 3.6 },
+];
+
 function LogoStage() {
   return (
     <div className="absolute inset-0 bg-cream">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,#f8f1e9_0%,transparent_65%)]" />
+      {/* Warm halo that slowly breathes behind the logo */}
+      <div className="hero-halo pointer-events-none absolute left-1/2 top-[47%] aspect-[16/10] w-[140vw] -translate-x-1/2 -translate-y-1/2 md:w-[90vw]" aria-hidden />
       <div className="hero-logo absolute left-1/2 top-[47%] aspect-[2154/1457] w-[94vw] max-w-[1080px] -translate-x-1/2 -translate-y-1/2 md:w-[70vw] lg:w-[62vw]">
         <Image src="/shez-logo.png" alt="" fill priority sizes="(min-width: 768px) 70vw, 94vw" className="object-contain" />
+        {/* Gold-leaf light travelling along the ink lines (the logo itself is the mask) */}
+        <div className="hero-shimmer pointer-events-none absolute inset-0" aria-hidden />
+        {SPARKLES.map((p, i) => (
+          <SparkIcon
+            key={i}
+            size={p.s}
+            className="hero-twinkle pointer-events-none absolute text-gold"
+            style={{ left: `${p.x}%`, top: `${p.y}%`, animationDelay: `${p.d}s` }}
+          />
+        ))}
       </div>
-      <div className="hero-meta container-x absolute inset-x-0 top-[calc(var(--header-h)+1.5rem)] flex justify-between text-ink/70">
-        <p className="eyebrow max-w-[9rem] text-[9px] leading-5 md:max-w-none md:text-[10px]">Atelier of romantic womenswear</p>
-        <p className="eyebrow text-right text-[9px] leading-5 md:text-[10px]">
-          Collection 01
-          <br className="md:hidden" /> <span className="max-md:hidden">·</span> 2026
-        </p>
-      </div>
-      <div className="hero-meta container-x absolute inset-x-0 bottom-[calc(96px+env(safe-area-inset-bottom))] flex items-end justify-between text-ink/70 md:bottom-10">
-        <p className="eyebrow text-[9px] md:text-[10px]">✂ — Cut along the line</p>
+      <div className="hero-meta container-x absolute inset-x-0 bottom-[calc(96px+env(safe-area-inset-bottom))] flex justify-end text-ink/70 md:bottom-10">
         <p className="eyebrow flex items-center gap-3 text-[9px] md:text-[10px]">
           Scroll
           <span className="relative block h-8 w-px overflow-hidden bg-ink/20">
@@ -65,7 +82,7 @@ export default function HeroCut() {
       const blades = q(".blades")[0] as HTMLElement;
       const card = q(".card")[0];
       const imgs = q(".card-img");
-      const counter = q(".counter-num")[0];
+      const dots = q(".card-dot");
       const cardLabel = q(".card-label")[0];
       const chars = q(".h-char");
 
@@ -74,10 +91,13 @@ export default function HeroCut() {
       try {
         seen = sessionStorage.getItem("shez.intro") === "1";
       } catch {}
+      let stopWaiting = () => {};
       if (!prefersReducedMotion()) {
-        lockScroll(true);
+        // Built paused (its first frame hides the logo), then played once the brand loader has lifted.
         const intro = gsap.timeline({
+          paused: true,
           defaults: { ease: "power3.inOut" },
+          onStart: () => lockScroll(true),
           onComplete: () => {
             lockScroll(false);
             try {
@@ -87,9 +107,12 @@ export default function HeroCut() {
         });
         intro
           .fromTo(q(".hero-logo"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: seen ? 0.9 : 2.1 })
+          // Light the gold while the ink is still drying, so the first sweep lands before scrolling unlocks.
+          .call(() => root.current?.classList.add("glow-on"), [], seen ? 0.35 : 1.1)
           .from(q(".hero-meta"), { opacity: 0, y: 12, duration: 0.8, stagger: 0.1 }, "-=0.6")
           .from(q(".cut-guide"), { scaleY: 0, transformOrigin: "top", duration: 1, ease: "power2.inOut" }, "-=0.7")
           .from(scissor, { opacity: 0, y: -20, duration: 0.6 }, "-=0.4");
+        stopWaiting = onAppReady(() => intro.play());
       }
 
       const mm = gsap.matchMedia();
@@ -130,7 +153,7 @@ export default function HeroCut() {
             if (i === lastIndex) return;
             lastIndex = i;
             imgs.forEach((el, k) => gsap.to(el, { autoAlpha: k === i ? 1 : 0, duration: 0.5, overwrite: true }));
-            counter.textContent = String(i + 1).padStart(2, "0");
+            dots.forEach((d, k) => d.setAttribute("data-active", String(k === i)));
             cardLabel.textContent = CARDS[i].label;
           };
           setIndex(0);
@@ -195,14 +218,17 @@ export default function HeroCut() {
       );
 
       // If we unmount mid-intro (route change, Strict Mode), never leave the page locked.
-      return () => lockScroll(false);
+      return () => {
+        stopWaiting();
+        lockScroll(false);
+      };
     },
     { scope: root },
   );
 
   return (
-    <section ref={root} className="relative h-[100svh] motion-safe:h-[460svh]" aria-label="Shez — Wear your story">
-      <h1 className="sr-only">Shez — Wear your story. Romantic womenswear, delivered island-wide.</h1>
+    <section ref={root} className="relative h-[100svh] motion-safe:h-[460svh]" aria-label="Shez, wear your story">
+      <h1 className="sr-only">Shez. Wear your story. Romantic womenswear, delivered island-wide.</h1>
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Revealed behind the cut */}
         <div className="absolute inset-0 bg-espresso text-cream">
@@ -224,30 +250,36 @@ export default function HeroCut() {
                 />
               ))}
             </div>
-            <div className="final pointer-events-none invisible absolute inset-0 bg-gradient-to-t from-espresso/85 via-espresso/10 to-transparent" />
+            <div className="final pointer-events-none invisible absolute inset-0 bg-gradient-to-t from-espresso via-espresso/55 to-transparent" />
+            <div className="final pointer-events-none invisible absolute inset-0 bg-gradient-to-r from-espresso/70 via-espresso/25 to-transparent" />
           </div>
 
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <p className="reveal-copy eyebrow invisible absolute top-[calc(50%-min(37vw,198px)-2.5rem)] text-[9px] text-sand md:top-[calc(50%-min(14.5vw,224px)-2.75rem)] md:text-[10px]">
-              Collection 01 — The Ivory Hour
+              The Ivory Hour collection
             </p>
             <div className="reveal-copy invisible absolute bottom-[calc(50%-min(37vw,198px)-4.5rem)] flex flex-col items-center gap-1.5 md:bottom-[calc(50%-min(14.5vw,224px)-4.5rem)]">
               <p className="font-display text-2xl italic">
                 <span className="card-label">{CARDS[0].label}</span>
               </p>
-              <p className="eyebrow text-[9px] text-sand/70">
-                <span className="counter-num">01</span> / {String(CARDS.length).padStart(2, "0")}
-              </p>
+              <div className="flex gap-1.5" aria-hidden>
+                {CARDS.map((c, i) => (
+                  <span key={c.src} className="card-dot h-1 w-1.5 rounded-full bg-sand/40 transition-all duration-500" data-active={i === 0} />
+                ))}
+              </div>
             </div>
           </div>
 
           <div className="final invisible container-x absolute inset-x-0 bottom-[calc(110px+env(safe-area-inset-bottom))] md:bottom-14">
-            <p className="final-sub eyebrow text-sand">Collection 01 — The Ivory Hour</p>
-            <h2 className="display mt-4 text-[17vw] leading-[0.86] md:text-[10vw]" aria-label={HEADLINE}>
+            <p className="final-sub eyebrow flex items-center gap-3 text-[10px] font-medium text-cream md:text-[11px]">
+              <span className="h-px w-8 bg-gold" aria-hidden />
+              The Ivory Hour collection
+            </p>
+            <h2 className="hero-headline display mt-5 text-[17vw] font-normal leading-[0.86] text-ivory md:text-[10vw]" aria-label={HEADLINE}>
               {HEADLINE.split(" ").map((word, w) => (
                 <span key={w} className="inline-block overflow-hidden pb-[0.06em] align-top">
                   {word.split("").map((ch, i) => (
-                    <span key={i} className={`h-char inline-block ${w === 1 ? "italic" : ""}`}>
+                    <span key={i} className={`h-char inline-block ${w === 1 ? "italic text-[#e9cf9f]" : ""}`}>
                       {ch}
                     </span>
                   ))}
@@ -255,11 +287,14 @@ export default function HeroCut() {
                 </span>
               ))}
             </h2>
+            <p className="final-sub mt-5 max-w-md text-[15px] leading-7 text-cream/90 md:text-base">
+              Romantic womenswear, finished by hand and delivered to your door.
+            </p>
             <div className="final-sub mt-7 flex flex-wrap items-center gap-3">
-              <Link href="/shop" className="eyebrow group pointer-events-auto flex items-center gap-3 rounded-full bg-cream px-7 py-4 text-ink">
+              <Link href="/shop" className="eyebrow group pointer-events-auto flex items-center gap-3 rounded-full bg-cream px-7 py-4 font-medium text-ink shadow-[0_10px_30px_-10px_rgba(0,0,0,.5)] transition-colors hover:bg-ivory">
                 Shop the collection <ArrowIcon size={15} className="transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="#story" className="eyebrow link-line pointer-events-auto px-3 py-4 text-cream/85">
+              <Link href="#story" className="eyebrow pointer-events-auto rounded-full border border-cream/60 px-7 py-4 font-medium text-cream backdrop-blur-sm transition-colors hover:bg-cream hover:text-ink">
                 Our story
               </Link>
             </div>

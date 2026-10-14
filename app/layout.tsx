@@ -8,6 +8,7 @@ import CartDrawer from "@/components/CartDrawer";
 import MobileDock from "@/components/MobileDock";
 import Cursor from "@/components/Cursor";
 import Footer from "@/components/Footer";
+import BrandLoader from "@/components/BrandLoader";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -25,7 +26,7 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Shez — Wear your story", template: "%s · Shez" },
+  title: { default: "Shez | Wear your story", template: "%s · Shez" },
   description:
     "Shez is a womenswear house of romantic bardots, tiered dresses and finishing pieces. Cash on delivery and bank transfer, island-wide.",
 };
@@ -40,7 +41,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${jost.variable}`}>
+      <head>
+        <link rel="preload" href="/shez-wordmark-sm.png" as="image" fetchPriority="high" />
+      </head>
       <body>
+        <noscript>
+          <style>{`.brand-loader{display:none!important}`}</style>
+        </noscript>
+        <BrandLoader />
         <CartProvider>
           <SmoothScroll />
           <Header />

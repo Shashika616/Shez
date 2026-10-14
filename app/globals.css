@@ -228,3 +228,166 @@ select {
     transform: translateX(6px);
   }
 }
+
+/* Hero card progress dots */
+.card-dot[data-active="true"] {
+  width: 1.25rem;
+  background: var(--color-gold);
+}
+
+/* ---------- Hero glow ---------- */
+/* A barely-there warmth around the logo, not a spotlight. */
+.hero-halo {
+  background: radial-gradient(ellipse 60% 45% at center, rgba(226, 196, 150, 0.16) 0%, rgba(232, 210, 172, 0.07) 50%, transparent 75%);
+  filter: blur(30px);
+  animation: halo-breathe 9s ease-in-out infinite;
+}
+@keyframes halo-breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-shimmer {
+  -webkit-mask: url("/shez-logo.png") center / 100% 100% no-repeat;
+  mask: url("/shez-logo.png") center / 100% 100% no-repeat;
+  background: linear-gradient(
+    105deg,
+    transparent 34%,
+    rgba(200, 156, 88, 0.75) 42%,
+    rgba(246, 222, 170, 1) 50%,
+    rgba(200, 156, 88, 0.75) 58%,
+    transparent 66%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  filter: drop-shadow(0 0 8px rgba(222, 180, 110, 0.8));
+}
+/* Starts the moment the intro adds .glow-on: an immediate first sweep, then one every 6.5s. */
+.glow-on .hero-shimmer {
+  animation: gold-sweep 6.5s ease-in-out infinite;
+}
+@keyframes gold-sweep {
+  0% {
+    background-position: 100% 0;
+  }
+  45%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+.hero-twinkle {
+  opacity: 0;
+  translate: -50% -50%;
+  filter: drop-shadow(0 0 6px rgba(222, 180, 110, 0.9));
+}
+.glow-on .hero-twinkle {
+  animation: twinkle 5s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    scale: 0.2;
+    rotate: 0deg;
+  }
+  18% {
+    opacity: 1;
+    scale: 1;
+  }
+  42% {
+    opacity: 0;
+    scale: 0.3;
+    rotate: 90deg;
+  }
+}
+
+.hero-headline {
+  text-shadow:
+    0 2px 30px rgba(31, 21, 14, 0.45),
+    0 0 60px rgba(233, 207, 159, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-halo,
+  .glow-on .hero-shimmer,
+  .glow-on .hero-twinkle {
+    animation: none;
+  }
+}
+
+/* ---------- Brand loader ---------- */
+.brand-loader {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1s var(--ease-cloth) 0.15s;
+}
+.brand-loader__inner {
+  transition:
+    opacity 0.5s ease,
+    transform 0.7s var(--ease-silk);
+}
+.brand-loader--leaving {
+  clip-path: inset(0 0 100% 0);
+}
+.brand-loader--leaving .brand-loader__inner {
+  opacity: 0;
+  transform: translateY(-24px);
+}
+.brand-loader__shine {
+  -webkit-mask: url("/shez-wordmark-sm.png") center / contain no-repeat;
+  mask: url("/shez-wordmark-sm.png") center / contain no-repeat;
+  background: linear-gradient(105deg, transparent 34%, rgba(200, 156, 88, 0.8) 44%, rgba(246, 222, 170, 1) 50%, rgba(200, 156, 88, 0.8) 56%, transparent 66%);
+  background-size: 300% 100%;
+  animation: loader-sweep 1.8s ease-in-out infinite;
+}
+@keyframes loader-sweep {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+.brand-loader__spark {
+  filter: drop-shadow(0 0 6px rgba(222, 180, 110, 0.9));
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+
+/* ---------- Skeletons ---------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-sand) 75%, transparent);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(100deg, transparent 20%, rgba(248, 241, 233, 0.75) 50%, transparent 80%);
+  animation: skeleton-sheen 1.6s ease-in-out infinite;
+}
+.skeleton-dark {
+  background: rgba(248, 241, 233, 0.06);
+}
+.skeleton-dark::after {
+  background: linear-gradient(100deg, transparent 20%, rgba(248, 241, 233, 0.08) 50%, transparent 80%);
+}
+@keyframes skeleton-sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after,
+  .brand-loader__shine,
+  .brand-loader__spark {
+    animation: none;
+  }
+}

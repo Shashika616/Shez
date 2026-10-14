@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
+import SmartImage from "../ui/SmartImage";
 import Link from "next/link";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/motion";
 import { products } from "@/lib/products";
 import { Reveal, SplitWords } from "../ui/Reveal";
+import SectionLabel from "../ui/SectionLabel";
 import { ArrowIcon } from "../ui/Icons";
 
 const TILES = [
@@ -32,7 +33,7 @@ export default function Categories() {
       <div className="container-x">
         <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="eyebrow text-brown">{"{04}"} — Shop by mood</p>
+            <SectionLabel kicker="Shop by mood" sub="Begin with a feeling, then find the piece" />
             <h2 className="display mt-4 text-[13vw] md:text-[6vw]">
               <SplitWords text="Choose your chapter." italic={["chapter."]} />
             </h2>
@@ -48,10 +49,9 @@ export default function Categories() {
                 <Link href={t.href} data-cursor="Explore" className="group relative block aspect-[4/5] overflow-hidden rounded-[2px] md:aspect-[3/4.4]">
                   <div className="curtain absolute inset-0" style={{ "--d": `${i * 120}ms` } as React.CSSProperties}>
                     <div className="tile-img absolute -inset-y-[10%] inset-x-0">
-                      <Image
+                      <SmartImage
                         src={t.img}
                         alt=""
-                        fill
                         sizes="(min-width:768px) 33vw, 100vw"
                         className="object-cover transition-transform duration-[1.6s] ease-[var(--ease-silk)] group-hover:scale-105"
                       />
@@ -61,7 +61,7 @@ export default function Categories() {
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5 text-cream md:p-7">
                     <div>
                       <p className="eyebrow text-[9px] text-sand/80">
-                        0{i + 1} · {count} pieces
+                        {count} pieces
                       </p>
                       <h3 className="display mt-2 text-4xl md:text-5xl">{t.title}</h3>
                       <p className="mt-1 text-sm italic text-sand/90">{t.note}</p>

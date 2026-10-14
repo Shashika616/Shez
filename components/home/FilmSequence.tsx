@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/motion";
+import SectionLabel from "../ui/SectionLabel";
+import { SparkIcon } from "../ui/Icons";
 
 const TOTAL = 120;
 
@@ -19,6 +21,7 @@ export default function FilmSequence() {
   const bg = useRef<HTMLCanvasElement>(null);
   const frames = useRef<HTMLImageElement[]>([]);
   const state = useRef({ frame: 0, step: 1, drawn: -1 });
+  const [hasFrame, setHasFrame] = useState(false);
 
   const draw = (force = false) => {
     const c = canvas.current;
@@ -45,9 +48,8 @@ export default function FilmSequence() {
     };
     paint(c);
     paint(b);
+    setHasFrame(true);
 
-    const label = root.current?.querySelector(".fr-num");
-    if (label) label.textContent = String(i + 1).padStart(3, "0");
   };
 
   useEffect(() => {
@@ -130,14 +132,16 @@ export default function FilmSequence() {
 
         <div className="film-frame absolute inset-0 overflow-hidden md:inset-auto md:left-1/2 md:top-1/2 md:h-[84svh] md:w-auto md:-translate-x-1/2 md:-translate-y-1/2 md:aspect-[9/16]">
           <canvas ref={canvas} className="h-full w-full" role="img" aria-label="A woman in an embroidered white dress turns slowly in a candle-lit room" />
+          {!hasFrame && (
+            <div className="skeleton skeleton-dark absolute inset-0 grid place-items-center" aria-hidden>
+              <SparkIcon size={18} className="brand-loader__spark text-gold" />
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-espresso/80 via-transparent to-espresso/30 md:from-espresso/30" />
         </div>
 
-        <div className="container-x absolute inset-x-0 top-[calc(var(--header-h)+1rem)] flex justify-between">
-          <p className="eyebrow text-[9px] text-sand/80">{"{03}"} — A film in three chapters</p>
-          <p className="eyebrow text-[9px] tabular-nums text-sand/80">
-            Fr. <span className="fr-num">001</span> / {TOTAL}
-          </p>
+        <div className="container-x absolute inset-x-0 top-[calc(var(--header-h)+1rem)]">
+          <SectionLabel kicker="Your story, in motion" tone="dark" reveal={false} />
         </div>
 
         {CHAPTERS.map((c) => (
@@ -149,7 +153,7 @@ export default function FilmSequence() {
           >
             <p className="eyebrow overflow-hidden text-gold">
               <span className="ch-line inline-block">
-                Chapter {c.n} — {c.title}
+                {c.title}
               </span>
             </p>
             <p className="display mt-4 text-[11vw] leading-[0.95] md:text-[3.6vw]">
@@ -172,7 +176,7 @@ export default function FilmSequence() {
           <div className="mt-2 hidden justify-between md:flex">
             {CHAPTERS.map((c) => (
               <span key={c.n} className="eyebrow text-[9px] text-sand/60">
-                {c.n}. {c.title}
+                {c.title}
               </span>
             ))}
           </div>

@@ -60,7 +60,7 @@ export const reviews: Review[] = [
     title: "Stripes done right",
     body: "The Riviera top is the perfect weight, not see-through at all. It looks even better in person than on the site.",
     product: "Riviera Stripe Bardot",
-    image: "/images/t1.jpg",
+    image: "/images/rv1.jpg",
   },
   {
     name: "Hannah D.",

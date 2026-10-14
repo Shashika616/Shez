@@ -8,6 +8,8 @@ import { useCart, type ResolvedLine } from "./CartProvider";
 import { price } from "@/lib/format";
 import { store } from "@/lib/config";
 import { ArrowIcon, SparkIcon } from "./ui/Icons";
+import SectionLabel from "./ui/SectionLabel";
+import { CheckoutSkeleton } from "./skeletons";
 import { customerSchema, fieldErrors, type Customer, type CustomerField, type OrderRequest, type OrderResponse, type PaymentMethod } from "@/lib/validation";
 
 type Method = PaymentMethod;
@@ -203,6 +205,7 @@ export default function Checkout() {
   };
 
   if (order) return <Confirmation order={order} />;
+  if (!hydrated) return <CheckoutSkeleton />;
 
   if (hydrated && lines.length === 0) {
     return (
@@ -248,8 +251,8 @@ export default function Checkout() {
         <div className="mt-8 grid gap-12 md:mt-14 md:grid-cols-12">
           <form onSubmit={place} noValidate className="md:col-span-7">
             <fieldset>
-              <legend className="eyebrow flex items-center gap-3 text-[10px]">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-ink text-ivory">1</span> Delivery details
+              <legend>
+                <SectionLabel kicker="Delivery details" sub="Where shall we send your story?" reveal={false} />
               </legend>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Field label="Full name" name="name" value={form.name} onChange={update} error={errors.name} autoComplete="name" />
@@ -262,8 +265,8 @@ export default function Checkout() {
             </fieldset>
 
             <fieldset className="mt-12">
-              <legend className="eyebrow flex items-center gap-3 text-[10px]">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-ink text-ivory">2</span> Payment method
+              <legend>
+                <SectionLabel kicker="Payment" sub="Pay in person, or by bank transfer" reveal={false} />
               </legend>
               <div className="mt-6 grid gap-3" role="radiogroup">
                 {(

@@ -1,19 +1,20 @@
 "use client";
 
-import Image from "next/image";
+import SmartImage from "../ui/SmartImage";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/motion";
 import { store } from "@/lib/config";
 import { Reveal, SplitWords } from "../ui/Reveal";
 import { SparkIcon } from "../ui/Icons";
+import SectionLabel from "../ui/SectionLabel";
 
 const COLS = [
   ["/images/e2.jpg", "/images/d16.jpg", "/images/t2.jpg"],
   ["/images/e10.jpg", "/images/e3.jpg", "/images/d14.jpg"],
   ["/images/e9.jpg", "/images/t7.jpg", "/images/e4.jpg"],
 ];
-const BAND = ["Wear your story", "Cash on delivery", "Bank transfer", "Island-wide delivery", "Hand-finished"];
+const BAND = ["Wear your story", "Every thread, a memory", "Made for golden hours", "Romance, quietly worn", "Softly, then all at once"];
 
 export default function Lookbook() {
   const root = useRef<HTMLElement>(null);
@@ -41,7 +42,7 @@ export default function Lookbook() {
 
       <div className="container-x mt-16 grid gap-10 md:mt-24 md:grid-cols-12">
         <Reveal className="md:col-span-4">
-          <p className="eyebrow text-taupe">{"{08}"} — #WearYourStory</p>
+          <SectionLabel kicker="#WearYourStory" sub="Our community, styled their own way" tone="dark" />
           <h2 className="display mt-4 text-[12vw] md:text-[4.2vw]">
             <SplitWords text="Seen on you." italic={["you."]} />
           </h2>
@@ -56,7 +57,7 @@ export default function Lookbook() {
               {col.map((src) => (
                 <Reveal key={src} threshold={0.1}>
                   <div className="curtain relative aspect-[3/4] overflow-hidden rounded-[2px]">
-                    <Image src={src} alt="" fill sizes="(min-width:768px) 22vw, 46vw" className="object-cover" />
+                    <SmartImage dark src={src} alt="" sizes="(min-width:768px) 22vw, 46vw" className="object-cover" />
                   </div>
                 </Reveal>
               ))}
