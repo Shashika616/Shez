@@ -10,6 +10,8 @@ export default function SmoothScroll() {
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
+    // Phones scroll natively with touch; skip the smoothing loop there entirely.
+    if (window.matchMedia("(max-width: 767px) and (pointer: coarse)").matches) return;
     const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, smoothWheel: true });
     setLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);

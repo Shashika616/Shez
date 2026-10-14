@@ -50,7 +50,7 @@ export default function MobileDock() {
       {!hideDock && (
         <nav
           aria-label="Quick"
-          className="fixed inset-x-0 bottom-[max(14px,env(safe-area-inset-bottom))] z-50 mx-auto flex w-[min(92vw,380px)] items-center gap-1 rounded-full border border-ink/10 bg-ivory/80 p-1.5 shadow-[0_10px_40px_-10px_rgba(31,21,14,.35)] backdrop-blur-xl md:hidden"
+          className="fixed inset-x-0 bottom-[max(14px,env(safe-area-inset-bottom))] z-50 mx-auto flex w-[min(92vw,380px)] items-center gap-1 rounded-full border border-ink/10 bg-ivory/95 p-1.5 shadow-[0_10px_40px_-10px_rgba(31,21,14,.35)] md:hidden"
         >
           <Link href="/" className={`eyebrow flex-1 rounded-full py-3 text-center text-[10px] ${pathname === "/" ? "bg-sand/70" : ""}`}>
             Home

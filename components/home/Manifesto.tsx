@@ -62,16 +62,19 @@ export default function Manifesto() {
           scrollTrigger: { trigger: ".m-text", start: "top 78%", end: "bottom 45%", scrub: true },
         },
       );
-      gsap.fromTo(
-        ".m-pill",
-        { width: 0 },
-        {
-          width: (_, el) => el.dataset.w,
-          ease: "power2.out",
-          stagger: 0.3,
-          scrollTrigger: { trigger: ".m-text", start: "top 75%", end: "bottom 55%", scrub: true },
-        },
-      );
+      // The pills grow inline, which re-flows the paragraph each frame: a desktop-only flourish.
+      gsap.matchMedia().add("(min-width: 768px)", () => {
+        gsap.fromTo(
+          ".m-pill",
+          { width: 0 },
+          {
+            width: (_, el) => el.dataset.w,
+            ease: "power2.out",
+            stagger: 0.3,
+            scrollTrigger: { trigger: ".m-text", start: "top 75%", end: "bottom 55%", scrub: true },
+          },
+        );
+      });
     },
     { scope: root },
   );

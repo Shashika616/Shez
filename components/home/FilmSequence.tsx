@@ -14,8 +14,27 @@ const CHAPTERS = [
   { n: "III", title: "The keepsake", line: "Made to be remembered. Made to be yours.", side: "left" },
 ];
 
-/** A film you play with your scroll: each scroll position maps to exactly one frame on a canvas. */
+const DESKTOP = "(min-width: 768px)";
+const isDesktop = () => window.matchMedia(DESKTOP).matches;
+
+/**
+ * Desktop: a film you play with your scroll, each scroll position mapped to one frame on a canvas.
+ * Phones: a light looping video instead (no frame downloads, no scroll-driven canvas work).
+ */
 export default function FilmSequence() {
+  return (
+    <>
+      <div className="hidden md:block">
+        <FilmScrub />
+      </div>
+      <div className="md:hidden">
+        <FilmLoop />
+      </div>
+    </>
+  );
+}
+
+function FilmScrub() {
   const root = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const bg = useRef<HTMLCanvasElement>(null);
@@ -53,9 +72,8 @@ export default function FilmSequence() {
   };
 
   useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 767px)").matches;
-    // Phones get every other frame (half the bytes) and a lower canvas resolution.
-    const step = mobile ? 2 : 1;
+    if (!isDesktop()) return;
+    const step = 1;
     state.current.step = step;
 
     // Only start downloading once the film is about to come into view.
@@ -83,7 +101,7 @@ export default function FilmSequence() {
     if (root.current) io.observe(root.current);
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       for (const cv of [canvas.current, bg.current]) {
         if (!cv) continue;
         const r = cv.getBoundingClientRect();
@@ -104,6 +122,7 @@ export default function FilmSequence() {
 
   useGSAP(
     () => {
+      if (!isDesktop()) return;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: root.current, start: "top top", end: "bottom bottom", scrub: 0.4 },
@@ -180,6 +199,101 @@ export default function FilmSequence() {
               </span>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Phones: the same film as a muted loop that only plays while on screen, with chapters following the playhead. */
+function FilmLoop() {
+  const root = useRef<HTMLElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
+  const [src, setSrc] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+  const [chapter, setChapter] = useState(0);
+
+  useEffect(() => {
+    if (isDesktop()) return;
+    const el = root.current;
+    const v = video.current;
+    if (!el || !v) return;
+    // Attach the source shortly before the section arrives, then play only while it's visible.
+    const near = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        setSrc("/film-mobile.mp4");
+        near.disconnect();
+      },
+      { rootMargin: "100% 0px" },
+    );
+    const onScreen = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) v.play().catch(() => {});
+      else v.pause();
+    }, { threshold: 0.25 });
+    near.observe(el);
+    onScreen.observe(el);
+    return () => {
+      near.disconnect();
+      onScreen.disconnect();
+    };
+  }, []);
+
+  const onTime = () => {
+    const v = video.current;
+    if (!v || !v.duration) return;
+    const p = v.currentTime / v.duration;
+    if (bar.current) bar.current.style.transform = `scaleX(${p.toFixed(3)})`;
+    const next = Math.min(CHAPTERS.length - 1, Math.floor(p * CHAPTERS.length));
+    setChapter((c) => (c === next ? c : next));
+  };
+
+  const c = CHAPTERS[chapter];
+
+  return (
+    <section ref={root} className="relative h-svh overflow-hidden bg-espresso text-cream" aria-label="The Shez film">
+      <video
+        ref={video}
+        src={src ?? undefined}
+        poster="/film/000.jpg"
+        muted
+        loop
+        playsInline
+        preload="none"
+        onLoadedData={() => setReady(true)}
+        onTimeUpdate={onTime}
+        className="absolute inset-0 h-full w-full object-cover"
+        aria-label="A woman in an embroidered white dress turns slowly in a candle-lit room"
+      />
+      {!ready && (
+        <div className="skeleton skeleton-dark absolute inset-0 grid place-items-center" aria-hidden>
+          <SparkIcon size={18} className="brand-loader__spark text-gold" />
+        </div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-espresso/85 via-transparent to-espresso/35" />
+
+      <div className="container-x absolute inset-x-0 top-[calc(var(--header-h)+1rem)]">
+        <SectionLabel kicker="Your story, in motion" tone="dark" reveal={false} />
+      </div>
+
+      <div className="container-x absolute inset-x-0 bottom-[calc(110px+env(safe-area-inset-bottom))]" aria-live="polite">
+        <div key={chapter} className="film-chapter-in">
+          <p className="eyebrow text-gold">{c.title}</p>
+          <p className="display mt-4 text-[11vw] leading-[0.95]">
+            {c.line.split(". ").map((line, i, a) => (
+              <span key={i} className={`block ${i === a.length - 1 && a.length > 1 ? "italic" : ""}`}>
+                {line}
+                {i < a.length - 1 ? "." : ""}
+              </span>
+            ))}
+          </p>
+        </div>
+      </div>
+
+      <div className="container-x absolute inset-x-0 bottom-[calc(84px+env(safe-area-inset-bottom))]">
+        <div className="h-px bg-cream/20">
+          <div ref={bar} className="h-px origin-left bg-gold transition-transform duration-300 ease-linear" style={{ transform: "scaleX(0)" }} />
         </div>
       </div>
     </section>

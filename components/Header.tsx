@@ -44,7 +44,7 @@ export default function Header() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,backdrop-filter] duration-700 ease-[var(--ease-silk)] ${
           hidden && !menu ? "-translate-y-full" : ""
-        } ${solid && !menu ? "bg-cream/75 backdrop-blur-md" : ""} ${menu ? "[&_.eyebrow]:!text-cream [&_svg]:text-cream" : ""}`}
+        } ${solid && !menu ? "bg-cream/95 md:bg-cream/75 md:backdrop-blur-md" : ""} ${menu ? "[&_.eyebrow]:!text-cream [&_svg]:text-cream" : ""}`}
       >
         <div className="container-x flex h-[var(--header-h)] items-center justify-between">
           <nav className="hidden flex-1 items-center gap-8 lg:flex" aria-label="Primary">

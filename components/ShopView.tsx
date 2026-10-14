@@ -72,7 +72,7 @@ export default function ShopView({ initial }: { initial: string }) {
           </p>
         </Reveal>
 
-        <div className="sticky top-0 z-30 -mx-[var(--gutter)] mt-10 bg-cream/85 px-[var(--gutter)] py-3 backdrop-blur-md ">
+        <div className="sticky top-0 z-30 -mx-[var(--gutter)] mt-10 bg-cream/95 px-[var(--gutter)] py-3 md:bg-cream/85 md:backdrop-blur-md">
           <div className="flex items-center justify-between gap-4">
             <LayoutGroup>
               <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 py-1" role="tablist" aria-label="Categories">

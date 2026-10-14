@@ -415,3 +415,39 @@ select {
     animation: none;
   }
 }
+
+/* Mobile film: each chapter rises in as the loop reaches it */
+.film-chapter-in {
+  animation: chapter-in 0.9s var(--ease-silk) both;
+}
+@keyframes chapter-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* ---------- Phone-only performance (desktop untouched) ----------
+   Full-screen filters, blends and blurs force the whole screen to repaint on every scroll frame. */
+@media (max-width: 767px) {
+  body::after {
+    display: none; /* the paper-grain blend layer */
+  }
+  .hero-halo {
+    filter: none;
+    animation: none;
+    opacity: 0.85;
+  }
+  .hero-shimmer {
+    filter: none;
+  }
+  .half-left,
+  .half-right {
+    filter: none !important;
+  }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .film-chapter-in {
+    animation: none;
+  }
+}
