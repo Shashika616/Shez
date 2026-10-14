@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { store } from "@/lib/config";
 import { ArrowIcon, SparkIcon } from "./ui/Icons";
 import { Reveal, SplitWords } from "./ui/Reveal";
+import FooterLogo from "./FooterLogo";
 
 export default function Footer() {
   const [joined, setJoined] = useState(false);
@@ -84,8 +84,8 @@ export default function Footer() {
       </div>
 
       <Reveal className="container-x relative mt-14">
-        <div className="curtain relative mx-auto aspect-[2154/1457] w-full max-w-[1100px] opacity-90">
-          <Image src="/shez-logo-light.png" alt="Shez, wear your story" fill sizes="100vw" className="object-contain" />
+        <div className="curtain">
+          <FooterLogo />
         </div>
       </Reveal>
 

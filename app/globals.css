@@ -391,3 +391,27 @@ select {
     animation: none;
   }
 }
+
+/* Footer logo placeholder: the logo's own silhouette, shimmering softly */
+.logo-skeleton {
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  background: linear-gradient(100deg, rgba(241, 229, 217, 0.1) 30%, rgba(241, 229, 217, 0.32) 50%, rgba(241, 229, 217, 0.1) 70%);
+  background-size: 300% 100%;
+  animation: logo-sheen 1.8s linear infinite;
+}
+@keyframes logo-sheen {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-skeleton {
+    animation: none;
+  }
+}
