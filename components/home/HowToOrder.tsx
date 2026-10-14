@@ -35,8 +35,12 @@ const STEPS = [
   },
 ];
 
+const DEFAULT_IMAGE = "/images/e11.jpg";
+
 export default function HowToOrder() {
-  const [active, setActive] = useState(0);
+  // All steps start folded; clicking an open step closes it again.
+  const [active, setActive] = useState<number | null>(null);
+  const image = active === null ? DEFAULT_IMAGE : STEPS[active].img;
 
   return (
     <section id="order" className="scroll-mt-10 bg-ivory py-24 md:py-36">
@@ -50,14 +54,14 @@ export default function HowToOrder() {
             <div className="relative mt-10 hidden aspect-[4/5] w-[78%] overflow-hidden rounded-[2px] md:block">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
-                  key={active}
+                  key={image}
                   className="absolute inset-0"
                   initial={{ clipPath: "inset(100% 0 0 0)" }}
                   animate={{ clipPath: "inset(0% 0 0 0)" }}
                   exit={{ opacity: 0.999 }}
                   transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 >
-                  <SmartImage src={STEPS[active].img} alt="" sizes="30vw" className="object-cover" />
+                  <SmartImage src={image} alt="" sizes="30vw" className="object-cover" />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -71,7 +75,7 @@ export default function HowToOrder() {
               return (
                 <li key={s.title} className="border-b border-ink/15">
                   <button
-                    onClick={() => setActive(i)}
+                    onClick={() => setActive(open ? null : i)}
                     aria-expanded={open}
                     className="flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
                   >
