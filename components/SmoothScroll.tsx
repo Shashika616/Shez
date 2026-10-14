@@ -25,18 +25,58 @@ export default function SmoothScroll() {
     };
   }, []);
 
-  // New page: jump to the top and re-measure every trigger once images settle.
+  // New page: start at the top (or at the #section the link asked for), then re-measure triggers.
   useEffect(() => {
-    getLenis()?.scrollTo(0, { immediate: true, force: true });
-    window.scrollTo(0, 0);
-    const t = setTimeout(() => ScrollTrigger.refresh(), 400);
-    const onLoad = () => ScrollTrigger.refresh();
-    window.addEventListener("load", onLoad);
+    const scrollTo = (y: number) => {
+      getLenis()?.scrollTo(y, { immediate: true, force: true });
+      window.scrollTo(0, y);
+    };
+    // ScrollTrigger remembers scroll positions per page and restores them on refresh;
+    // without clearing, it pulls the new page back down to where the previous one was.
+    ScrollTrigger.clearScrollMemory("manual");
+
+    const hash = window.location.hash.slice(1);
+    const toTarget = () => {
+      const el = hash ? document.getElementById(decodeURIComponent(hash)) : null;
+      scrollTo(el ? el.getBoundingClientRect().top + window.scrollY : 0);
+      ScrollTrigger.update();
+    };
+    toTarget();
+    // Let the new page lay out (sections, images) before settling on a #target.
+    const raf = hash ? requestAnimationFrame(() => requestAnimationFrame(toTarget)) : 0;
+
+    const refresh = () => {
+      ScrollTrigger.clearScrollMemory("manual");
+      ScrollTrigger.refresh();
+      if (hash) toTarget();
+    };
+    const t = setTimeout(refresh, 400);
+    window.addEventListener("load", refresh);
     return () => {
+      cancelAnimationFrame(raf);
       clearTimeout(t);
-      window.removeEventListener("load", onLoad);
+      window.removeEventListener("load", refresh);
     };
   }, [pathname]);
+
+  // A link to the page you're already on changes nothing, so the router does nothing.
+  // Treat it as "take me to the top of this page" instead of leaving you where you were.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element).closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+      const url = new URL(a.href, window.location.href);
+      const here = window.location;
+      if (url.origin !== here.origin || url.pathname !== here.pathname || url.search !== here.search || url.hash) return;
+      const lenis = getLenis();
+      if (lenis) lenis.scrollTo(0, { duration: 1 });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    // Capture phase: Next's <Link> marks the click handled before it would bubble up to us.
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
 
   return null;
 }

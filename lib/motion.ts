@@ -6,6 +6,9 @@ import type Lenis from "lenis";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  // Phones resize the viewport as the address bar shows/hides; don't re-measure (and jump) for that.
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 }
 
 // One Lenis instance shared by the whole app (set by <SmoothScroll>).

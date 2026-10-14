@@ -58,7 +58,8 @@ export default function Reviews() {
         </Reveal>
       </div>
 
-      <div className="marquee-wrap mt-14 space-y-4 md:mt-20 md:space-y-6">
+      {/* Empty touch listener: iOS Safari only applies :active (press-to-pause) when one exists. */}
+      <div className="marquee-wrap mt-14 space-y-4 md:mt-20 md:space-y-6" onTouchStart={() => {}}>
         <div className="marquee" style={{ "--speed": "70s" } as React.CSSProperties}>
           {[...rowA, ...rowA].map((r, i) => (
             <Card key={i} r={r} />

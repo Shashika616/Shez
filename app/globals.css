@@ -146,7 +146,14 @@ body::after {
 .marquee[data-reverse="true"] {
   animation-direction: reverse;
 }
-.marquee-wrap:hover .marquee {
+/* Pause to read: on hover with a mouse, or while a finger is pressed down on touch screens.
+   (Plain :hover "sticks" after a tap on phones, which would freeze the rows for good.) */
+@media (hover: hover) and (pointer: fine) {
+  .marquee-wrap:hover .marquee {
+    animation-play-state: paused;
+  }
+}
+.marquee-wrap:active .marquee {
   animation-play-state: paused;
 }
 
