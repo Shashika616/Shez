@@ -346,8 +346,8 @@ select {
   transform: translateY(-24px);
 }
 .brand-loader__shine {
-  -webkit-mask: url("/shez-wordmark-sm.png") center / contain no-repeat;
-  mask: url("/shez-wordmark-sm.png") center / contain no-repeat;
+  -webkit-mask: url("/shez-wordmark-sm-v2.png") center / contain no-repeat;
+  mask: url("/shez-wordmark-sm-v2.png") center / contain no-repeat;
   background: linear-gradient(105deg, transparent 34%, rgba(200, 156, 88, 0.8) 44%, rgba(246, 222, 170, 1) 50%, rgba(200, 156, 88, 0.8) 56%, transparent 66%);
   background-size: 300% 100%;
   animation: loader-sweep 1.8s ease-in-out infinite;
@@ -456,5 +456,22 @@ select {
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) {
   .film-chapter-in {
     animation: none;
+  }
+}
+
+/* Our story: the founders' signature writes itself left to right */
+.sig-write {
+  clip-path: inset(-15% 100% -25% -2%);
+  transition: clip-path 2.2s cubic-bezier(0.45, 0, 0.25, 1);
+  transition-delay: var(--d, 0ms);
+}
+[data-inview="true"] .sig-write {
+  /* negative right inset: the italic heart leans past the text box */
+  clip-path: inset(-15% -12% -25% -2%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sig-write {
+    transition: none;
+    clip-path: none;
   }
 }

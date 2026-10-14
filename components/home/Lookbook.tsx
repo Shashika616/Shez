@@ -47,7 +47,11 @@ export default function Lookbook() {
             <SplitWords text="Seen on you." italic={["you."]} />
           </h2>
           <p className="fade-up mt-6 max-w-xs text-[15px] leading-7 text-cream/70">
-            Tag {store.contact.instagram} to be featured, and to receive a handwritten thank-you with your next order.
+            Tag{" "}
+            <a href={store.social.instagram} target="_blank" rel="noopener noreferrer" className="link-line text-cream">
+              {store.contact.instagram}
+            </a>{" "}
+            to be featured, and to receive a handwritten thank-you with your next order.
           </p>
         </Reveal>
 

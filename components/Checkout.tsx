@@ -350,7 +350,7 @@ export default function Checkout() {
               <p className="eyebrow mb-6 text-[10px]">Your order</p>
               <Summary lines={lines} subtotal={subtotal} delivery={delivery} total={total} />
               <ul className="mt-6 space-y-2 border-t border-ink/10 pt-5 text-xs text-ink/65">
-                {[`Dispatched in ${store.dispatchDays}`, "7-day exchanges", "Gift wrapped as standard"].map((t) => (
+                {[`Delivered ${store.deliveryArea} in ${store.dispatchDays}`, "7-day exchanges", "Gift wrapped as standard"].map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <SparkIcon size={8} className="text-gold" /> {t}
                   </li>
@@ -403,7 +403,7 @@ function Confirmation({ order }: { order: Order }) {
             <>
               <p className="display text-3xl">Cash on delivery</p>
               <p className="mt-2 text-sm text-ink/65">
-                Please keep <strong className="font-medium text-ink">{price(order.total)}</strong> ready for the courier. Delivery in {store.dispatchDays}.
+                Please keep <strong className="font-medium text-ink">{price(order.total)}</strong> ready for the courier. Delivery {store.deliveryArea} in {store.dispatchDays}.
               </p>
             </>
           )}

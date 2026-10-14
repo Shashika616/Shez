@@ -228,7 +228,7 @@ export default function ProductView({ product, related }: { product: Product; re
             </button>
 
             <ul className="mt-6 grid grid-cols-2 gap-2 text-[12px] text-ink/70">
-              {["Cash on delivery", "Bank transfer", `Ships in ${store.dispatchShort}`, "7-day exchange"].map((t) => (
+              {["Cash on delivery", "Bank transfer", `Delivery in ${store.dispatchShort}`, "7-day exchange"].map((t) => (
                 <li key={t} className="flex items-center gap-2 rounded-xl bg-ivory px-3 py-3">
                   <SparkIcon size={9} className="shrink-0 text-gold" /> {t}
                 </li>
@@ -248,7 +248,7 @@ export default function ProductView({ product, related }: { product: Product; re
               </Accordion>
               <Accordion title="Fabric & care">{product.fabric}</Accordion>
               <Accordion title="Delivery & payment">
-                Delivered island-wide in {store.dispatchDays}. {price(store.deliveryFee)} delivery, complimentary over {price(store.freeDeliveryOver)}. Pay by
+                Delivered {store.deliveryArea} in {store.dispatchDays}. {price(store.deliveryFee)} delivery, complimentary over {price(store.freeDeliveryOver)}. Pay by
                 cash on delivery, or by bank transfer to {store.bank.accountName}. We confirm every order personally on WhatsApp.
               </Accordion>
             </div>

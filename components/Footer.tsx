@@ -6,6 +6,7 @@ import { store } from "@/lib/config";
 import { ArrowIcon, SparkIcon } from "./ui/Icons";
 import { Reveal, SplitWords } from "./ui/Reveal";
 import FooterLogo from "./FooterLogo";
+import SocialLinks from "./ui/SocialLinks";
 
 export default function Footer() {
   const [joined, setJoined] = useState(false);
@@ -43,7 +44,7 @@ export default function Footer() {
           <p className="mt-3 text-xs text-cream/50">New drops, restocks and private previews. Never spam.</p>
         </Reveal>
 
-        <div className="grid grid-cols-2 gap-10 text-sm md:col-span-5 md:col-start-8 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-x-10 gap-y-12 text-sm md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
           <div>
             <p className="eyebrow mb-5 text-taupe">Shop</p>
             <ul className="space-y-3 text-cream/80">
@@ -63,12 +64,16 @@ export default function Footer() {
               <li><Link className="link-line" href="/checkout">Checkout</Link></li>
             </ul>
           </div>
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 border-t border-cream/10 pt-10">
             <p className="eyebrow mb-5 text-taupe">Say hello</p>
-            <ul className="space-y-3 text-cream/80">
-              <li>WhatsApp {store.contact.whatsapp}</li>
-              <li>{store.contact.email}</li>
-              <li>{store.contact.instagram}</li>
+            <SocialLinks className="flex-wrap" />
+            <ul className="mt-6 flex flex-col gap-3 text-cream/80 sm:flex-row sm:flex-wrap sm:gap-x-8">
+              <li>
+                <a className="link-line [overflow-wrap:anywhere]" href={`mailto:${store.contact.email}`}>
+                  {store.contact.email}
+                </a>
+              </li>
+              <li className="whitespace-nowrap">WhatsApp {store.contact.whatsapp}</li>
               <li className="text-cream/50">{store.contact.studio}</li>
             </ul>
           </div>
@@ -76,7 +81,7 @@ export default function Footer() {
       </div>
 
       <div className="container-x mt-20 flex flex-wrap gap-2">
-        {["Cash on delivery", "Bank transfer", `Dispatch in ${store.dispatchShort}`, "7-day exchanges"].map((t) => (
+        {["Cash on delivery", "Bank transfer", `Delivery ${store.deliveryArea}`, `${store.dispatchShort[0].toUpperCase()}${store.dispatchShort.slice(1)} delivery`, "7-day exchanges"].map((t) => (
           <span key={t} className="eyebrow flex items-center gap-2 rounded-full border border-cream/15 px-4 py-2.5 text-[9px] text-cream/70">
             <SparkIcon size={8} className="text-gold" /> {t}
           </span>
@@ -91,7 +96,6 @@ export default function Footer() {
 
       <div className="container-x mt-10 flex flex-col justify-between gap-3 border-t border-cream/10 pt-6 text-[11px] tracking-wide text-cream/45 md:flex-row">
         <p>© {new Date().getFullYear()} Shez. All rights reserved.</p>
-        <p>Photography via Unsplash · Film via Mixkit (prototype imagery)</p>
       </div>
     </footer>
   );

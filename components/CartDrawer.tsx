@@ -84,7 +84,7 @@ export default function CartDrawer() {
                       You&apos;re <strong className="font-medium text-ink">{price(remaining)}</strong> away from free delivery
                     </>
                   ) : (
-                    <>Complimentary island-wide delivery unlocked ✦</>
+                    <>Complimentary delivery unlocked ✦</>
                   )}
                 </p>
                 <div className="mt-2 h-[3px] overflow-hidden rounded-full bg-sand">

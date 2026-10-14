@@ -89,7 +89,7 @@ export default function ShopView({ initial }: { initial: string }) {
             </h1>
           </div>
           <p className="fade-up text-[15px] leading-7 text-ink/70 md:col-span-4">
-            Romantic tops, dresses and finishing pieces. Cash on delivery or bank transfer, dispatched in {store.dispatchDays}.
+            Romantic tops, dresses and finishing pieces. Cash on delivery or bank transfer, delivered {store.deliveryArea} in {store.dispatchDays}.
           </p>
         </Reveal>
 

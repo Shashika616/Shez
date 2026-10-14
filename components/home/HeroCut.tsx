@@ -228,7 +228,7 @@ export default function HeroCut() {
 
   return (
     <section ref={root} className="relative h-[100svh] motion-safe:h-[460svh]" aria-label="Shez, wear your story">
-      <h1 className="sr-only">Shez. Wear your story. Romantic womenswear, delivered island-wide.</h1>
+      <h1 className="sr-only">Shez. Wear your story. Romantic womenswear, delivered within Colombo.</h1>
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Revealed behind the cut */}
         <div className="absolute inset-0 bg-espresso text-cream">

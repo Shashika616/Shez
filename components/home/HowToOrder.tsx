@@ -29,7 +29,7 @@ const STEPS = [
   },
   {
     title: "Wrapped & on its way",
-    body: `Tissue-wrapped, sealed with a note and dispatched in ${store.dispatchDays}. Exchanges within 7 days if it's not quite right.`,
+    body: `Tissue-wrapped, sealed with a note and delivered ${store.deliveryArea} in ${store.dispatchDays}. Exchanges within 7 days if it's not quite right.`,
     tags: ["Tracked delivery", "7-day exchange"],
     img: "/images/j6.jpg",
   },

@@ -28,7 +28,7 @@ const jost = Jost({
 export const metadata: Metadata = {
   title: { default: "Shez | Wear your story", template: "%s · Shez" },
   description:
-    "Shez is a womenswear house of romantic bardots, tiered dresses and finishing pieces. Cash on delivery and bank transfer, island-wide.",
+    "Shez is a womenswear house of romantic bardots, tiered dresses and finishing pieces. Cash on delivery and bank transfer, delivered within Colombo.",
 };
 
 export const viewport: Viewport = {
@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${cormorant.variable} ${jost.variable}`}>
       <head>
-        <link rel="preload" href="/shez-wordmark-sm.png" as="image" fetchPriority="high" />
+        <link rel="preload" href="/shez-wordmark-sm-v2.png" as="image" fetchPriority="high" />
       </head>
       <body>
         <noscript>

@@ -30,7 +30,10 @@ export function Reveal({ as = "div", className, style, children, threshold = 0.2
           if (once) io.disconnect();
         } else if (!once) setInView(false);
       },
-      { threshold, rootMargin: "0px 0px -6% 0px" },
+      // The watched area reaches far above the screen, so anything already scrolled past counts as seen.
+      // A fast flick can carry an element from below the screen to above it without it ever "crossing"
+      // the visible window, which would otherwise leave it hidden for good.
+      { threshold, rootMargin: once ? "100000px 0px -6% 0px" : "0px 0px -6% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();

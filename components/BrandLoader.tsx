@@ -86,9 +86,9 @@ export default function BrandLoader() {
       aria-label="Loading Shez"
     >
       <div className="brand-loader__inner flex flex-col items-center">
-        <div className="relative h-[66px] w-[140px] md:h-[85px] md:w-[180px]">
+        <div className="relative h-[60px] w-[140px] md:h-[77px] md:w-[180px]">
           {/* eslint-disable-next-line @next/next/no-img-element -- plain img so it paints before hydration */}
-          <img src="/shez-wordmark-sm.png" alt="" fetchPriority="high" className="h-full w-full object-contain" />
+          <img src="/shez-wordmark-sm-v2.png" alt="" fetchPriority="high" className="h-full w-full object-contain" />
           <div className="brand-loader__shine absolute inset-0" aria-hidden />
           <SparkIcon size={14} className="brand-loader__spark absolute -right-5 top-0 text-gold" />
         </div>

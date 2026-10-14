@@ -10,6 +10,7 @@ import { BagIcon, CloseIcon } from "./ui/Icons";
 import { lockScroll } from "@/lib/motion";
 import { onAppReady } from "@/lib/ready";
 import NavLinks, { ActiveNav } from "./nav/NavLinks";
+import SocialLinks from "./ui/SocialLinks";
 import { NAV } from "./nav/useActiveNav";
 
 export default function Header() {
@@ -61,8 +62,8 @@ export default function Header() {
             {menu ? "Close" : "Menu"}
           </button>
 
-          <Link href="/" aria-label="Shez home" className="relative block h-8 w-[68px] md:h-10 md:w-[85px]">
-            <Image src={menu ? "/shez-wordmark-light.png" : "/shez-wordmark.png"} alt="Shez" fill sizes="90px" priority className="object-contain" />
+          <Link href="/" aria-label="Shez home" className="relative block h-8 w-[75px] md:h-10 md:w-[94px]">
+            <Image src={menu ? "/shez-wordmark-light-v2.png" : "/shez-wordmark-v2.png"} alt="Shez" fill sizes="90px" priority className="object-contain" />
           </Link>
 
           <div className="flex flex-1 items-center justify-end gap-7">
@@ -140,11 +141,10 @@ export default function Header() {
               </ActiveNav>
             </nav>
             <div className="container-x flex items-end justify-between pb-28 text-sand/70">
-              <p className="eyebrow leading-6">
-                Cash on delivery
-                <br />
-                Bank transfer
-              </p>
+              <div>
+                <p className="eyebrow mb-4 text-[9px]">Follow the story</p>
+                <SocialLinks size={42} />
+              </div>
               <button onClick={() => setMenu(false)} aria-label="Close menu" className="grid h-12 w-12 place-items-center rounded-full border border-sand/30">
                 <CloseIcon />
               </button>
